@@ -20,7 +20,7 @@ $router->add('POST', '/registrar', 'LoginController@registrar');
 
 error_log("URL:".$_SERVER['REQUEST_URI']);
 
-$url = $_SERVER['REQUEST_URI'] == '/' ? '/index' : $_SERVER['REQUEST_URI'];
+$url = $_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == '' ? '/index' : $_SERVER['REQUEST_URI'];
 
 error_log("Requisição recebida: URL: $url, Método: {$_SERVER['REQUEST_METHOD']}");  
 $router->dispatch($url);
