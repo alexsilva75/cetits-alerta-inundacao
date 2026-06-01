@@ -15,7 +15,12 @@ class Router {
     {
         $method = $_SERVER['REQUEST_METHOD'];
        // echo "URL: $url, Method: $method<br>";
+       error_log("IN ROUTER URL: $url, Method: $method");
        $baseUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+       error_log("Processando rota: $baseUrl, Método: $method");
+
+       $baseUrl = $baseUrl == '/' || $baseUrl == '' ? '/index' : $baseUrl;
 
         if(isset($this->routes[$method][$baseUrl])) {
 
