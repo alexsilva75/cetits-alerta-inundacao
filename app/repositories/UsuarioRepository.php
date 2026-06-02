@@ -4,6 +4,7 @@ namespace Repositories;
 
 use Core\Database;
 use Models\Usuario;
+
 use PDO;
 
 class UsuarioRepository
@@ -62,11 +63,11 @@ class UsuarioRepository
         ]);
     }
 
-     public function findByEmailOrNomeUsuario($email, $nome_usuario)
+    public function findByEmailOrNomeUsuario($email, $nome_usuario)
     {
         $stmt = $this->pdo->prepare("SELECT * FROM usuario WHERE email = ? OR nome_usuario = ?");
         $stmt->execute([$email, $nome_usuario]);
 
         return $stmt->fetchObject(Usuario::class);
-    }   
+    }
 }
