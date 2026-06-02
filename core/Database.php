@@ -12,7 +12,7 @@ class Database
     {
         if (!self::$instance) {
             self::$instance = new PDO(
-                "mysql:host=localhost;dbname=alerta",
+                "mysql:host=localhost;dbname=alerta_inundacao;charset=utf8",
                 "root",
                 ""
             );

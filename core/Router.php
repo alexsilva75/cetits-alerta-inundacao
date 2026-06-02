@@ -15,15 +15,29 @@ class Router {
     {
         $method = $_SERVER['REQUEST_METHOD'];
        // echo "URL: $url, Method: $method<br>";
+       error_log("IN ROUTER URL: $url, Method: $method");
+       $baseUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-        if(isset($this->routes[$method][$url])) {
+       error_log("Processando rota: $baseUrl, Método: $method");
 
-            list($controller, $action) = explode('@', $this->routes[$method][$url]);
+       $baseUrl = $baseUrl == '/' || $baseUrl == '' ? '/index' : $baseUrl;
+
+        if(isset($this->routes[$method][$baseUrl])) {
+
+            list($controller, $action) = explode('@', $this->routes[$method][$baseUrl]);
 
             $controllerClass = "Controllers\\" . $controller;
 
+
+            $requestData = match ($method) {
+                'GET' => $_GET,
+                'POST' => $_POST,
+                default => []
+            };
+
+            error_log("Rota encontrada: $controllerClass@$action");
             $controllerObj = new $controllerClass();
-            $controllerObj->$action();
+            $controllerObj->$action($requestData);
 
         } else {
             echo "Rota não encontrada";
