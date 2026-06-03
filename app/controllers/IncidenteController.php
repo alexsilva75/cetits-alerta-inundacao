@@ -2,17 +2,17 @@
 
 namespace Controllers;
 
-class IncidenteController
+class IncidenteController extends \Core\Controller
 {
     public function index()
     {
-        include __DIR__ . '/../views/list_incidentes.html';
+        $this->view('list_incidentes.html.twig');
     }
 
     public function create()
     {
-        include __DIR__ . '/../views/create_incidente.html';
+        $this->view('create_incidente.html.twig');
     }
 
-    
+
 }
