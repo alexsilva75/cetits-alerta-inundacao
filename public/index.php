@@ -2,9 +2,13 @@
 session_start();
 require_once '../vendor/autoload.php';
 
+
 use \Core\Router;
+use Core\View;
 
 $router = new Router();
+
+View::init();
 
 $router->add('GET', '/index', 'IndexController@index');
 $router->add('GET', '/usuarios', 'UsuarioController@index');
@@ -16,6 +20,9 @@ $router->add('POST', '/login', 'LoginController@autenticar');
 $router->add('GET', '/dashboard', 'DashboardController@showDashboard');
 $router->add('GET', '/showRegistrar', 'LoginController@showRegistrar');
 $router->add('POST', '/registrar', 'LoginController@registrar');
+
+$router->add('GET', '/list-incidents', 'IncidenteController@index');
+$router->add('GET', '/create-incident', 'IncidenteController@create');
 
 
 error_log("URL:".$_SERVER['REQUEST_URI']);

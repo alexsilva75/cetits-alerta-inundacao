@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Local com Risco de Alagamento</title>
+
+    <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #map {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid ">
+        <div class="row">
+            <div class="col-8 map-container">
+                <h1>Alerta de Inundação</h1>
+                <h2>Sistema para registro de pontos de risco de alagamento</h2>
+
+                <p>Pontos de alagamento registrados na última semana.</p>
+
+                <div id="map"></div>
+
+                <!--<form action="/salvar-local" method="POST">
+
+                    <label>Latitude</label><br>
+                    <input type="text" id="latitude" name="latitude" readonly><br><br>
+
+                    <label>Longitude</label><br>
+                    <input type="text" id="longitude" name="longitude" readonly><br><br>
+
+                    <label>Descrição</label><br>
+                    <textarea name="descricao"></textarea><br><br>
+
+                    <button type="submit">Enviar</button>
+
+                </form>-->
+
+                {% if incidentes is empty %}
+                    <p>Nenhum incidente registrado na última semana.</p>
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                    
+                    {% for incidente in incidentes %}
+                        <p>{{ incidente.descricao }} - {{ incidente.latitude }}, {{ incidente.longitude }} - {{ incidente.data_hora }}</p>
+                    {% endfor %}
+                </div>
+
+                {% endif %}
+                
+
+            </div>
+            <div class="col-4 " id="login-sidebar">
+                <p>Para registrar um novo local de risco de alagamento é necessário estar logado.</p>
+                <h2>Login</h2>
+                <form method="POST" action="/login">
+                    <div class="mb-3">
+
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="senha" class="form-label">Senha:</label>
+                        <input type="password" class="form-control" id="senha" name="senha" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+                <p>Não é cadastrado? Registre-se <a href="/showRegistrar">aqui</a>.</p>
+                
+                
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="text-center py-4">
+        <p>&copy; 2024 Alerta de Inundação. Todos os direitos reservados.</p>
+    </footer>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+
+        const map = L.map('map');//.setView([-12.5797, -38.4037], 13); // Salvador
+
+        if("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                map.setView([userLat, userLng], 13);
+            });
+        }else {
+            // Se geolocalização não for suportada, centraliza em Salvador
+            map.setView([-12.5797, -38.4037], 13);
+        }
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+
+        let marker;
+
+        // Evento de clique no mapa
+        /*map.on('click', function (e) {
+
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+
+            // Atualiza formulário
+            document.getElementById("latitude").value = lat;
+            document.getElementById("longitude").value = lng;
+
+            // Remove marcador anterior
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            // Adiciona novo marcador
+            marker = L.marker([lat, lng]).addTo(map);
+
+        });*/
+
+    </script>
+
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

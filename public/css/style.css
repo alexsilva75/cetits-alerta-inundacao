@@ -1,0 +1,25 @@
+body {
+    background-color: #0b2027;
+    color: #b3c9d1;
+}
+
+.map-container{
+    /*background-color: #0b2027;
+    color: #40798C;*/
+}
+
+footer {
+    background-color: #071317;
+   /* color: #40798C;*/
+    padding: 10px 0;
+    margin-bottom: 0;
+}
+
+#login-sidebar {
+    
+    background-color: #091a1f;
+    color: #b3c9d1;
+    padding: 20px;
+    border-radius: 5px;
+    
+}

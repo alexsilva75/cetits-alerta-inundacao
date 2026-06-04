@@ -8,5 +8,8 @@
       "Repositories\\": "app/repositories/",
       "Services\\": "app/services/"
     }
+  },
+  "require": {
+    "twig/twig": "~3.0"
   }
 }
