@@ -107,6 +107,9 @@
                 const userLng = position.coords.longitude;
                 map.setView([userLat, userLng], 13);
             });
+        }else {
+            // Se geolocalização não for suportada, centraliza em Salvador
+            map.setView([-12.5797, -38.4037], 13);
         }
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
