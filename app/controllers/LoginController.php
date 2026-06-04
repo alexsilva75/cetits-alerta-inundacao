@@ -4,7 +4,7 @@ namespace Controllers;
 use Services\AuthService;
 
 
-class LoginController
+class LoginController extends \Core\Controller
 {
     private AuthService $authService;
 

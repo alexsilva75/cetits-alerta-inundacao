@@ -5,11 +5,16 @@ namespace Models;
 
 class Incidente
 {
-    private int $id;
-    private string $descricao;
-    private string $localizacao;
-    private string $data_hora;
-    private int $usuario_id;
+    public int $id;
+    public string $titulo;
+
+    public string $descricao;
+    public string $logradouro;
+    public DateTime $data_hora;
+    public int $usuario_id;
+    public float $latitude;
+    public float $longitude;
+    public DateTime $criado_em;
 
     public function getId(): int
     {
@@ -31,14 +36,14 @@ class Incidente
         $this->descricao = $descricao;
     }
 
-    public function getLocalizacao(): string
+    public function getLogradouro(): string
     {
-        return $this->localizacao;
+        return $this->logradouro;
     }
 
-    public function setLocalizacao(string $localizacao): void
+    public function setLogradouro(string $logradouro): void
     {
-        $this->localizacao = $localizacao;
+        $this->logradouro = $logradouro;
     }
 
     public function getDataHora(): string
@@ -60,4 +65,36 @@ class Incidente
     {
         $this->usuario_id = $usuario_id;
     }
+
+    public function getLatitude(): float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(float $latitude): void
+    {
+        $this->latitude = $latitude;
+    }
+
+    public function getLongitude(): float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(float $longitude): void
+    {
+        $this->longitude = $longitude;
+    }
+
+    public function getTitulo(): string
+    {
+        return $this->titulo;
+    }
+
+    public function setTitulo(string $titulo): void
+    {
+        $this->titulo = $titulo;
+    }
+
+
 }

@@ -36,8 +36,10 @@ class Router
                 default => []
             };
 
+            $container = new Container();
             error_log("Rota encontrada: $controllerClass->$action, Dados da requisição: " . json_encode($requestData));
-            $controllerObj = new $controllerClass();
+            
+            $controllerObj = $container->make($controllerClass);//new $controllerClass();
 
             ///loginController->showLogin($_GET);
             $controllerObj->$action($requestData);

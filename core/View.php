@@ -22,6 +22,8 @@ class View
                 'debug' => true
             ]
         );
+
+        
     }
 
     public static function render(
@@ -29,9 +31,21 @@ class View
         array $data = []
     )
     {
+        self::$twig->addGlobal(
+            'session',
+            $_SESSION
+        );  
+
+        self::$twig->addGlobal(
+            'flash',
+            $_SESSION['flash'] ?? null
+        );
+
         echo self::$twig->render(
             $template,
             $data
         );
+
+        unset($_SESSION['flash']);
     }
 }

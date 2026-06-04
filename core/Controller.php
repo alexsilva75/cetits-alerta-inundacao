@@ -9,9 +9,13 @@ class Controller
         array $data = []
     )
     {
+
+
         View::render(
             $template,
             $data
         );
+
+        
     }
 }
