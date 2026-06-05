@@ -23,6 +23,8 @@ $router->add('POST', '/registrar', 'LoginController@registrar');
 
 $router->add('GET', '/list-incidents', 'IncidenteController@index');
 $router->add('GET', '/create-incident', 'IncidenteController@create');
+$router->add('GET', '/usuarios/{id}/edit', 'UsuarioController@edit');
+$router->add('GET', '/incidentes/{id}', 'IncidenteController@fetch');
 
 
 error_log("URL:".$_SERVER['REQUEST_URI']);

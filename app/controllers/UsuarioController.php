@@ -36,4 +36,11 @@ class UsuarioController
         $this->usuarioRepository->save($usuario);
         header('Location: /usuarios');
     }
+
+    public function edit($request)
+    {
+        $id = $request->route('id');
+        echo "Editar usuário com ID: $id";
+    }
+        
 }

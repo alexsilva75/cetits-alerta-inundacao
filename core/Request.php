@@ -11,6 +11,7 @@ class Request
     private array $cookies = [];
     private array $headers = [];
     private array $server = [];
+    private array $routeParams = [];
 
 
     public function __construct()
@@ -55,7 +56,7 @@ class Request
             PHP_URL_PATH
         );
     }
-    
+
     public function files()
     {
         return $this->files;
@@ -124,5 +125,22 @@ class Request
     public function isPost()
     {
         return $this->method() === 'POST';
+    }
+
+    public function setRouteParams(
+        array $params
+    ): void
+    {
+        error_log("Definindo parâmetros de rota: " . json_encode($params));
+        $this->routeParams = $params;
+    }
+
+    public function route(
+        string $key,
+        mixed $default = null
+    ): mixed
+    {
+        return $this->routeParams[$key]
+            ?? $default;
     }
 }

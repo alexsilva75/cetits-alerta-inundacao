@@ -14,5 +14,14 @@ class IncidenteController extends \Core\Controller
         $this->view('create_incidente.html.twig');
     }
 
+    public function fetch($request)
+    {
+        $id = $request->route('id');
+        // Aqui você pode buscar o incidente pelo ID e passar os dados para a view
+        //$this->view('incidente_detail.html.twig', ['id' => $id]);
+
+        echo "Detalhes do incidente com ID: $id";
+    }
+
 
 }

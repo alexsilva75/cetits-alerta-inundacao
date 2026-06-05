@@ -67,33 +67,15 @@
                 
 
             </div>
-            <div class="col-4 " id="login-sidebar">
-                <p>Para registrar um novo local de risco de alagamento é necessário estar logado.</p>
-                <h2>Login</h2>
-                <form method="POST" action="/login">
-                    <div class="mb-3">
-
-                        <label for="email" class="form-label">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="senha" class="form-label">Senha:</label>
-                        <input type="password" class="form-control" id="senha" name="senha" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Entrar</button>
-                </form>
-                <p>Não é cadastrado? Registre-se <a href="/showRegistrar">aqui</a>.</p>
-                
-                
-            </div>
+            <!--login-->
+            {% include 'layouts/partials/_side_login_form.html.twig' %}
         </div>
 
     </div>
 
-    <footer class="text-center py-4">
-        <p>&copy; 2024 Alerta de Inundação. Todos os direitos reservados.</p>
-    </footer>
+    <!-- footer -->
+    {% include 'layouts/partials/_footer.html.twig' %}
+
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
