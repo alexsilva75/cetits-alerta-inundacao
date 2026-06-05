@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-class DashboardController
+class DashboardController extends \Core\Controller
 {
     public function showDashboard()
     {
@@ -18,6 +18,8 @@ class DashboardController
         }
 
         // Carregar a view do dashboard
-        require __DIR__ . '/../views/dashboard.php';
+        //require __DIR__ . '/../views/dashboard.php';
+
+        $this->view('dashboard.html.twig');
     }
 }

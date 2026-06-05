@@ -2,6 +2,7 @@
 
 namespace Controllers;
 use Services\AuthService;
+use Core\Request;
 
 
 class LoginController extends \Core\Controller
@@ -13,9 +14,9 @@ class LoginController extends \Core\Controller
         $this->authService = new AuthService();
     }
 
-    public function showRegistrar($data)
+    public function showRegistrar(Request $request)
     {
-        $error = $data['error'] ?? null;
+        $error = $request->query('error') ?? null;
 
         if ($error) {
             $errorMessage = urldecode($error);
@@ -26,9 +27,9 @@ class LoginController extends \Core\Controller
         require_once '../app/views/auth/registrar.php';
     }
 
-    public function showLogin($data)
+    public function showLogin(Request $request)
     {
-        $error = $data['error'] ?? null;
+        $error = $request->query('error') ?? null;
 
         if ($error) {
             $errorMessage = urldecode($error);
@@ -40,8 +41,9 @@ class LoginController extends \Core\Controller
     }
 
 
-    public function autenticar($data)
+    public function autenticar(Request $request)
     {
+        $data = $request->all();
         $usuario = $this->authService->autenticar($data['email'], $data['senha']);
 
         error_log("Resultado da autenticação: " . ($usuario ? "Sucesso" : "Falha") . "<br>");
@@ -60,8 +62,9 @@ class LoginController extends \Core\Controller
         }
     }
 
-        public function registrar($data)
+        public function registrar(Request $request)
         {
+            $data = $request->all();
             try {
                 $this->authService->registrar($data);
                 header('Location: /login');
