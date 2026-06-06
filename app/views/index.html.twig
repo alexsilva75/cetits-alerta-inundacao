@@ -1,29 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Registro de Local com Risco de Alagamento</title>
-
-    <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css">
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="./css/style.css">
-
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        #map {
-            height: 400px;
-            margin-bottom: 20px;
-        }
-
-        form {
-            width: 400px;
-        }
-    </style>
+    <title>Alerta de Inundação</title>
+    {{ include('layouts/partials/_head_content.html.twig') }}
 </head>
 
 <body>
@@ -38,20 +17,7 @@
 
                 <div id="map"></div>
 
-                <!--<form action="/salvar-local" method="POST">
-
-                    <label>Latitude</label><br>
-                    <input type="text" id="latitude" name="latitude" readonly><br><br>
-
-                    <label>Longitude</label><br>
-                    <input type="text" id="longitude" name="longitude" readonly><br><br>
-
-                    <label>Descrição</label><br>
-                    <textarea name="descricao"></textarea><br><br>
-
-                    <button type="submit">Enviar</button>
-
-                </form>-->
+                
 
                 {% if incidentes is empty %}
                     <p>Nenhum incidente registrado na última semana.</p>
@@ -68,7 +34,7 @@
 
             </div>
             <!--login-->
-            {% include 'layouts/partials/_side_login_form.html.twig' %}
+            {% include 'layouts/partials/_login_form.html.twig' %}
         </div>
 
     </div>

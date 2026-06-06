@@ -17,14 +17,16 @@ class LoginController extends \Core\Controller
     public function showRegistrar(Request $request)
     {
         $error = $request->query('error') ?? null;
-
+        var_dump($error);
         if ($error) {
             $errorMessage = urldecode($error);
             //passar $errorMessage para a view
 
 
         }
-        require_once '../app/views/auth/registrar.php';
+        $this->view('auth/registrar.html.twig', [
+            'errorMessage' => $errorMessage ?? null
+        ]);
     }
 
     public function showLogin(Request $request)
@@ -37,7 +39,11 @@ class LoginController extends \Core\Controller
 
 
         }
-        require_once '../app/views/auth/login.php';
+        //require_once '../app/views/auth/login.php';
+
+        $this->view('auth/login.html.twig', [
+            'errorMessage' => $errorMessage ?? null
+        ]);
     }
 
 
@@ -54,7 +60,9 @@ class LoginController extends \Core\Controller
 
          
              $_SESSION['user_id'] = $usuario->getId();
+             $_SESSION['user'] = $usuario;
 
+             //var_dump($_SESSION['user']);
             header('Location: /dashboard');
         } else {
             // falha no login  

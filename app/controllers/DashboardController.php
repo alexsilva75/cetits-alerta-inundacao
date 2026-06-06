@@ -19,7 +19,7 @@ class DashboardController extends \Core\Controller
 
         // Carregar a view do dashboard
         //require __DIR__ . '/../views/dashboard.php';
-
+        //var_dump($_SESSION['user']);
         $this->view('dashboard.html.twig');
     }
 }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <title>Login</title>
+    {{ include('layouts/partials/_head_content.html.twig') }}
+</head>
+<body>
+    
+    <?php if (isset($errorMessage)): ?>
+        <p style="color: red;"><?php echo htmlspecialchars($errorMessage); ?></p>
+    <?php endif; ?>
+
+    <!--<form method="POST" action="/login">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="senha">Senha:</label><br>
+        <input type="password" id="senha" name="senha" required><br><br>
+        <button type="submit">Entrar</button>
+    </form>-->
+
+    <div class="container ">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2>Login</h2>
+            <form method="POST" action="/login">
+                <div class="mb-3">
+
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="senha" class="form-label">Senha:</label>
+                    <input type="password" class="form-control" id="senha" name="senha" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+            <p>Não é cadastrado? Registre-se <a href="/showRegistrar">aqui</a>.</p>
+            </div>
+            
+            
+        </div>
+    </div>
+
+    
+</body>
+
+</html>

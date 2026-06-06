@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>Registro de Usuário</title>
+    {{ include('layouts/partials/_head_content.html.twig') }}
+</head>
+<body>
+    
+    <div class="container ">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1>Registro de Usuário</h1>
+                <p>Preencha o formulário abaixo para criar uma nova conta.</p>
+
+                <?php if (isset($errorMessage)): ?>
+                    <p style="color: red;"><?php echo htmlspecialchars($errorMessage); ?></p>
+                <?php endif; ?>
+                
+                <form action="/registrar" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label" for="nome">Nome:</label>
+                        <input class="form-control" type="text" id="nome" name="nome" required><br>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="sobrenome">Sobrenome:</label>
+                        <input class="form-control" type="text" id="sobrenome" name="sobrenome" required><br>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email:</label>
+                        <input class="form-control" type="email" id="email" name="email" required><br>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="nome_usuario">Nome de Usuário:</label>
+                        <input class="form-control" type="text" id="nome_usuario" name="nome_usuario" required><br>
+                    </div>
+                    <div class="mb-3"> 
+                        <label class="form-label" for="senha">Senha:</label>
+                        <input class="form-control" type="password" id="senha" name="senha" required><br>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </form>
+                <p>Já tem uma conta? Faça login <a href="/login">aqui</a>.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
