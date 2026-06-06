@@ -1,6 +1,8 @@
 <?php
 namespace Controllers;
 use Services\IncidenteService;
+use Core\Request;
+use Core\Response;
 
 class IndexController extends \Core\Controller{
 
@@ -13,7 +15,7 @@ class IndexController extends \Core\Controller{
     }
     
 
-    public function index()
+    public function index(Request $request, Response $response)
     {
         
         $lastWeeksIncidents = $this->incidenteService->getLastWeeksIncidents();

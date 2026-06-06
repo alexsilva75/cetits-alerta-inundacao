@@ -98,7 +98,17 @@
             attribution: '&copy; OpenStreetMap'
         }).addTo(map);
 
-        let marker;
+        fetch('/api/incidentes/last-week')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(incidente => {
+                    L.marker([incidente.latitude, incidente.longitude])
+                        .addTo(map)
+                        .bindPopup(`<b>Descrição:</b> ${incidente.descricao}<br><b>Data/Hora:</b> ${incidente.data_hora}`);
+                });
+            })
+            .catch(error => console.error('Erro ao carregar incidentes:', error));
+        //let marker;
 
         // Evento de clique no mapa
         /*map.on('click', function (e) {

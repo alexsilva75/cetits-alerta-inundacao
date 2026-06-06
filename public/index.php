@@ -25,6 +25,7 @@ $router->add('GET', '/list-incidents', 'IncidenteController@index');
 $router->add('GET', '/create-incident', 'IncidenteController@create');
 $router->add('GET', '/usuarios/{id}/edit', 'UsuarioController@edit');
 $router->add('GET', '/incidentes/{id}', 'IncidenteController@fetch');
+$router->add('GET', '/api/incidentes/last-week', 'Api\IncidenteController@lastWeekIncidents');
 
 
 error_log("URL:".$_SERVER['REQUEST_URI']);

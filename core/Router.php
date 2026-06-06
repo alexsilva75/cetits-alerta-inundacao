@@ -123,7 +123,7 @@ class Router
             error_log("Resolvendo controlador: $controllerClass->$action, Parâmetros: " . json_encode($params));
             
             $controllerObj = $container->make($controllerClass);//new $controllerClass();
-            $controllerObj->$action($request);
+            $controllerObj->$action($request, new Response());
         } catch (\Exception $e) {
             error_log("Erro ao resolver controlador: " . $e->getMessage());
             http_response_code(500);
