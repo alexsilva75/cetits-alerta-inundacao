@@ -15,20 +15,6 @@ class Router
     public function dispatch($url)
     {
         $method = $_SERVER['REQUEST_METHOD'];
-
-        if (!$this->resolveUnparameterizedRoute($url, $method)) {
-            //echo "Rota não encontrada";
-           // http_response_code(404);
-            //echo "404 Not Found";
-
-            $this->resolveParameterizedRoute($url, $method);
-        }
-        
-    }
-
-    private function resolveUnparameterizedRoute($url, $method)
-    {
-        // echo "URL: $url, Method: $method<br>";
         error_log("IN ROUTER URL: $url, Method: $method");
         $baseUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -36,27 +22,28 @@ class Router
 
         $baseUrl = $baseUrl == '/' || $baseUrl == '' ? '/index' : $baseUrl;
 
+        if (!$this->resolveUnparameterizedRoute($baseUrl, $method) && !$this->resolveParameterizedRoute($url, $method)) {
+            //echo "Rota não encontrada";
+            http_response_code(404);
+            echo "404 Not Found";
+        }               
+        
+    }
+
+    private function resolveUnparameterizedRoute($baseUrl, $method)
+    {
+        
         if (isset($this->routes[$method][$baseUrl])) {
 
-            list($controller, $action) = explode('@', $this->routes[$method][$baseUrl]);
-
-            $controllerClass = "Controllers\\" . $controller;
-
-
+            $this->doControllerAction($this->routes[$method][$baseUrl]);
+           
             /*$requestData = match ($method) {
                 'GET' => $_GET,
                 'POST' => $_POST,
                 default => []
             };*/
 
-            $request = new Request();
-
-            $container = new Container();
-            error_log("Rota encontrada: $controllerClass->$action, Dados da requisição: " . json_encode($request->all()));
             
-            $controllerObj = $container->make($controllerClass);//new $controllerClass();
-          
-            $controllerObj->$action($request);
             return true;
         } else {
             //echo "Rota não encontrada";
@@ -66,13 +53,7 @@ class Router
     }
 
     private function resolveParameterizedRoute($url, $method)
-    {
-        error_log("IN ROUTER URL: $url, Method: $method");
-        $baseUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-        error_log("Processando rota: $baseUrl, Método: $method");
-
-        $baseUrl = $baseUrl == '/' || $baseUrl == '' ? '/index' : $baseUrl;
+    {        
 
         foreach ($this->routes[$method] as $route => $handler) {
 
@@ -87,8 +68,7 @@ class Router
             );
 
             $pattern = '#^' . $pattern . '$#';
-            //echo("Pattern: $pattern, URL: $url<br>");
-
+            
             if (preg_match(
                 $pattern,
                 $url,
@@ -107,32 +87,13 @@ class Router
 
                     // parâmetros encontrados
                     
-                    $params = array_combine(
-                            $paramNames[1],
-                            $matches
-                        );
+                $params = array_combine(
+                        $paramNames[1],
+                        $matches
+                    );
                         
-                    list($controller, $action) = explode('@', $this->routes[$method][$route]);
-
-                $controllerClass = "Controllers\\" . $controller;
-
-
-                /*$requestData = match ($method) {
-                    'GET' => $_GET,
-                    'POST' => $_POST,
-                    default => []
-                };*/
-
-                $request = new Request();
-
-                $request->setRouteParams($params);
-
-                $container = new Container();
-                error_log("Rota encontrada: $controllerClass->$action, Dados da requisição: " . json_encode($request->all()));
+                $this->doControllerAction($this->routes[$method][$route], $params);
                 
-                $controllerObj = $container->make($controllerClass);//new $controllerClass();
-            
-                $controllerObj->$action($request);
                 return true;
 
             } else{
@@ -142,5 +103,32 @@ class Router
 
         echo "Rota não encontrada";
         return false;
+    }
+
+    private function doControllerAction($handler, $params = [])
+    {
+        try {
+            error_log("Resolvendo controlador: $handler, Parâmetros: " . json_encode($params));
+            list($controller, $action) = explode('@', $handler);
+            $controllerClass = "Controllers\\" . $controller;
+
+            $container = new Container();
+
+            $request = new Request();
+
+            if (!empty($params)) {
+                $request->setRouteParams($params);
+            }
+
+            error_log("Resolvendo controlador: $controllerClass->$action, Parâmetros: " . json_encode($params));
+            
+            $controllerObj = $container->make($controllerClass);//new $controllerClass();
+            $controllerObj->$action($request);
+        } catch (\Exception $e) {
+            error_log("Erro ao resolver controlador: " . $e->getMessage());
+            http_response_code(500);
+            echo "500 Internal Server Error";
+        }
+       
     }
 }
