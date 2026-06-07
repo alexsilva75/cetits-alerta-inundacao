@@ -2,8 +2,19 @@
 
 namespace Controllers;
 
+use Services\IncidenteService;
+
 class DashboardController extends \Core\Controller
 {
+
+    private $incidenteService;
+
+    public function __construct(IncidenteService $incidenteService)
+    {
+        
+        $this->incidenteService = $incidenteService;
+    }
+
     public function showDashboard()
     {
 
@@ -17,9 +28,8 @@ class DashboardController extends \Core\Controller
             exit();
         }
 
-        // Carregar a view do dashboard
-        //require __DIR__ . '/../views/dashboard.php';
-        //var_dump($_SESSION['user']);
-        $this->view('dashboard.html.twig');
+        $userIncidents = $this->incidenteService->getIncidentsByUserId($_SESSION['user_id']);
+
+        $this->view('dashboard.html.twig', ['incidents' => $userIncidents]);
     }
 }

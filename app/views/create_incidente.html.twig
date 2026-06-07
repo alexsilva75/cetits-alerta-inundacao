@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Local com Risco de Alagamento</title>
+
+    <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #map {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h1>Alerta de Inundação</h1>
+                <h2>Registro de Local com Risco de Alagamento</h2>
+
+                <p>Selecione o local no mapa abaixo:</p>
+
+                <div id="map"></div>
+
+                
+            </div>
+            <div class="col-4">
+                <p>Fornecça mais detalhes sobre o local selecionado:</p>
+                <form action="/salvar-local" method="POST">                   
+                    
+                    <input type="hidden" id="latitude" name="latitude" readonly>                   
+                    <input type="hidden" id="longitude" name="longitude" readonly>
+
+                    <div class="mb-3">
+                        <label for="inicio_alagamento" class="form-label">Início do Alagamento</label>
+                        <input
+                            class="form-control"
+                            type="datetime-local"
+                            id="inicio_alagamento"
+                            name="data_hora"
+                            value="{{ 'now'|date('Y-m-d\\TH:i') }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="titulo" name="titulo">
+                        <p>Exemplo: "Alagamento na Rua X"</p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="logradouro" class="form-label">Logradouro (Rua, Avenida, Praça, etc.)</label>
+                        <input type="text" class="form-control" id="logradouro" name="logradouro" rows="3"> 
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="bairro" class="form-label">Bairro</label>
+                        <input type="text" class="form-control" id="bairro" name="bairro" rows="3"> 
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cidade" class="form-label">Cidade</label>
+                        <input type="text" class="form-control" id="cidade" name="cidade" rows="3"> 
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Enviar</button>
+                </form>
+                
+                
+            </div>
+        </div>
+
+    </div>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+
+        let map = L.map('map');// = L.map('map').setView([-12.5797, -38.4037], 13); // Salvador
+        
+        if("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                map.setView([userLat, userLng], 13);
+            });
+        }
+
+        
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+
+        let marker;
+
+        // Evento de clique no mapa
+        map.on('click', function (e) {
+
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+
+            // Atualiza formulário
+            document.getElementById("latitude").value = lat;
+            document.getElementById("longitude").value = lng;
+
+            // Remove marcador anterior
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            // Adiciona novo marcador
+            marker = L.marker([lat, lng]).addTo(map);
+
+        });
+
+    </script>
+
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

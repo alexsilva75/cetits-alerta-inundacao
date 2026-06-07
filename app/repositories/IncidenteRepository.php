@@ -7,6 +7,16 @@ class IncidenteRepository extends Repository
  
 public function createIncidente($incidente){
     // Lógica para salvar o incidente no banco de dados 
+    
+
+    $stmt = $this->pdo->prepare("INSERT INTO incidente (titulo,usuario_id, latitude, longitude, descricao, criado_em) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([
+        $incidente['usuario_id'],
+        $incidente['latitude'],
+        $incidente['longitude'],
+        $incidente['descricao'],
+        $incidente['data_hora'] ?? date('Y-m-d H:i:s')
+    ]);
 }
 
 public function getIncidentes(){
@@ -32,7 +42,9 @@ public function deleteIncidente($id){
 
 public function getIncidentesByUsuarioId($usuarioId){
     // Lógica para recuperar os incidentes de um usuário específico do banco de dados
-
+    $stmt = $this->pdo->prepare("SELECT * FROM incidente WHERE id = ?");
+    $stmt->execute([$usuarioId]);
+    return $stmt->fetchAll();
 }
 
 public function getIncidentesByLocalizacao($latitude, $longitude, $radius){
@@ -60,6 +72,30 @@ public function findIncidentsSince($data){
     $stmt->execute([$data]);
     return $stmt->fetchAll();
 
+}
+
+public function findIncidentsInCitySince($data, $city, $uf){
+    // Lógica para recuperar os incidentes desde uma data específica do banco de dados
+
+    $query = <<<SQL
+        SELECT * FROM incidente i JOIN logradouro l 
+        ON i.logradouro_id = l.id JOIN bairro b 
+        ON l.bairro_id = b.id JOIN cidade c 
+        ON b.cidade_id = c.id WHERE i.criado_em >= ? AND c.nome = ? AND c.uf = ?
+    SQL;
+    $stmt = $this->pdo->prepare($query);
+    $stmt->execute([$data, $city, $uf]);
+    return $stmt->fetchAll();
+
+}
+
+public function save($incidente){
+    // Lógica para salvar ou atualizar um incidente no banco de dados
+    if (isset($incidente['id'])) {
+        return $this->updateIncidente($incidente['id'], $incidente);
+    } else {
+        return $this->createIncidente($incidente);
+    }
 }
 
 }

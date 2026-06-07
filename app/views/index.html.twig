@@ -46,6 +46,37 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
+        const ufMapping = {
+            'BR-BA': 'BA',
+            'BR-SP': 'SP',  
+            'BR-RJ': 'RJ',
+            'BR-PE': 'PE',
+            'BR-CE': 'CE',
+            'BR-AL': 'AL',
+            'BR-SE': 'SE',
+            'BR-PB': 'PB',
+            'BR-RN': 'RN',
+            'BR-PI': 'PI',
+            'BR-MA': 'MA',
+            'BR-ES': 'ES',
+            'BR-MS': 'MS',
+            'BR-MT': 'MT',
+            'BR-GO': 'GO',
+            'BR-DF': 'DF',
+            'BR-PR': 'PR',
+            'BR-SC': 'SC',
+            'BR-RS': 'RS',
+            'BR-AP': 'AP',
+            'BR-AC': 'AC',
+            'BR-AM': 'AM',
+            'BR-RO': 'RO',
+            'BR-RR': 'RR',
+            'BR-PA': 'PA',
+            'BR-TO': 'TO'
+            'BR-AP': 'AP',         
+             
+
+        }
 
         const map = L.map('map');//.setView([-12.5797, -38.4037], 13); // Salvador
 
@@ -54,6 +85,13 @@
                 const userLat = position.coords.latitude;
                 const userLng = position.coords.longitude;
                 map.setView([userLat, userLng], 13);
+            });
+
+            fetch("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${userLat}&longitude=${userLng}&localityLanguage=pt")
+            .then(response => response.json()).then(data => {
+                console.log("Localização do usuário:", data.city, data.principalSubdivision, data.principalSubdivisionCode);
+            }).catch(error => {
+                console.error("Erro ao obter localização do usuário:", error);
             });
         }else {
             // Se geolocalização não for suportada, centraliza em Salvador

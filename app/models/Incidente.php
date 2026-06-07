@@ -10,6 +10,9 @@ class Incidente
 
     public string $descricao;
     public string $logradouro;
+    public string $bairro;
+    public string $cidade;
+    public string $uf;
     public DateTime $data_hora;
     public int $usuario_id;
     public float $latitude;
@@ -96,5 +99,28 @@ class Incidente
         $this->titulo = $titulo;
     }
 
+    public function setBairro(string $bairro){
+        $this->bairro = $bairro;
+    }
+
+    public function getBairro(){
+        return $this->bairro;
+    }
+
+    public function setCidade(string $cidade){
+        $this->cidade = $cidade;
+    }
+
+    public function getCidade(){
+        return $this->cidade;
+    }
+
+    public function setUf(string $uf){
+        $this->uf = $uf;
+    }
+
+    public function getUf(){
+        return $this->uf;
+    }
 
 }
