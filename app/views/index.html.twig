@@ -22,12 +22,14 @@
                 {% if incidentes is empty %}
                     <p>Nenhum incidente registrado na última semana.</p>
                 {% else %}
-                    <div class="alert alert-info" role="alert">
+                    <p>Últimos Incidentes: <span id="city"></span></p>
                     
                     {% for incidente in incidentes %}
-                        <p>{{ incidente.descricao }} - {{ incidente.latitude }}, {{ incidente.longitude }} - {{ incidente.data_hora }}</p>
+                        <div class="alert alert-info" role="alert">
+                            <p>{{ incidente.descricao }} - {{ incidente.latitude }}, {{ incidente.longitude }} - {{ incidente.data_hora }}</p>
+                        </div>
                     {% endfor %}
-                </div>
+                
 
                 {% endif %}
                 
@@ -72,8 +74,8 @@
             'BR-RO': 'RO',
             'BR-RR': 'RR',
             'BR-PA': 'PA',
-            'BR-TO': 'TO'
-            'BR-AP': 'AP',         
+            'BR-TO': 'TO',
+            'BR-AP': 'AP'         
              
 
         }
@@ -90,6 +92,7 @@
             fetch("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${userLat}&longitude=${userLng}&localityLanguage=pt")
             .then(response => response.json()).then(data => {
                 console.log("Localização do usuário:", data.city, data.principalSubdivision, data.principalSubdivisionCode);
+                document.querySelector('#city').innerHTML = data.city;
             }).catch(error => {
                 console.error("Erro ao obter localização do usuário:", error);
             });
@@ -105,6 +108,7 @@
         fetch('/api/incidentes/last-week')
             .then(response => response.json())
             .then(data => {
+                console.log('Iterando sobre incidentes')
                 data.forEach(incidente => {
                     L.marker([incidente.latitude, incidente.longitude])
                         .addTo(map)

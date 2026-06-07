@@ -12,6 +12,7 @@ class Request
     private array $headers = [];
     private array $server = [];
     private array $routeParams = [];
+    private array $session = [];
 
 
     public function __construct()
@@ -22,6 +23,7 @@ class Request
         $this->cookies = $_COOKIE;
         $this->headers = getallheaders();
         $this->server = $_SERVER;
+        $this->session = $_SESSION;
     }
 
     public function getPath()
@@ -43,6 +45,10 @@ class Request
     {
         return $this->body;
     }
+
+    /*public function input($key){
+        return $this->body[$key];
+    }*/
 
     public function query()
     {
@@ -142,5 +148,9 @@ class Request
     {
         return $this->routeParams[$key]
             ?? $default;
+    }
+
+    public function session($key){
+        return $this->session[$key];
     }
 }

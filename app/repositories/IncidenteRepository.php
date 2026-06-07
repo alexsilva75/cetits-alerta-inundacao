@@ -7,15 +7,25 @@ class IncidenteRepository extends Repository
  
 public function createIncidente($incidente){
     // Lógica para salvar o incidente no banco de dados 
-    
+    $query = <<<SQL
+                INSERT INTO incidente
+                 (titulo,usuario_id, logradouro, bairro, cidade, uf, latitude, longitude, descricao, data_hora, criado_em) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    SQL;
 
-    $stmt = $this->pdo->prepare("INSERT INTO incidente (titulo,usuario_id, latitude, longitude, descricao, criado_em) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $this->pdo->prepare($query);
     $stmt->execute([
-        $incidente['usuario_id'],
-        $incidente['latitude'],
-        $incidente['longitude'],
-        $incidente['descricao'],
-        $incidente['data_hora'] ?? date('Y-m-d H:i:s')
+        $incidente->titulo,
+        $incidente->usuario_id,
+        $incidente->logradouro,
+        $incidente->bairro,
+        $incidente->cidade,
+        $incidente->uf,
+        $incidente->latitude,
+        $incidente->longitude,
+        $incidente->descricao,
+        $incidente->data_hora ?? date('Y-m-d H:i:s'),
+        $incidente->criado_em ?? date('Y-m-d H:i:s')
     ]);
 }
 

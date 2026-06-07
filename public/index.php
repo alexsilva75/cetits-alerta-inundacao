@@ -24,6 +24,7 @@ $router->add('POST', '/registrar', 'LoginController@registrar');
 
 $router->add('GET', '/list-incidents', 'IncidenteController@index');
 $router->add('GET', '/create-incident', 'IncidenteController@create');
+$router->add('POST', '/incidentes/store', 'IncidenteController@store');
 $router->add('GET', '/usuarios/{id}/edit', 'UsuarioController@edit');
 $router->add('GET', '/incidentes/{id}', 'IncidenteController@fetch');
 $router->add('GET', '/api/incidentes/last-week', 'Api\IncidenteController@lastWeekIncidents');
