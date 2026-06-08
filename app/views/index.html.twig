@@ -18,21 +18,9 @@
                 <div id="map"></div>
 
                 
-
-                {% if incidentes is empty %}
-                    <p>Nenhum incidente registrado na última semana.</p>
-                {% else %}
-                    <p>Últimos Incidentes: <span id="city"></span></p>
-                    
-                    {% for incidente in incidentes %}
-                        <div class="alert alert-info" role="alert">
-                            <p>{{ incidente.descricao }} - {{ incidente.latitude }}, {{ incidente.longitude }} - {{ incidente.data_hora }}</p>
-                        </div>
-                    {% endfor %}
-                
-
-                {% endif %}
-                
+                <div id="incidentes">
+                    {{ include('layouts/partials/_incidentes.html.twig') }}
+                </div>
 
             </div>
             <!--login-->
@@ -45,9 +33,12 @@
     {% include 'layouts/partials/_footer.html.twig' %}
 
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>-->
+    <script src="./leaflet/leaflet.js"></script>
 
     <script>
+        const map = L.map('map');
+
         const ufMapping = {
             'BR-BA': 'BA',
             'BR-SP': 'SP',  
@@ -80,42 +71,92 @@
 
         }
 
-        const map = L.map('map');//.setView([-12.5797, -38.4037], 13); // Salvador
-
-        if("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
-                map.setView([userLat, userLng], 13);
-            });
-
-            fetch("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${userLat}&longitude=${userLng}&localityLanguage=pt")
+        function reverseGeocoding(userLat, userLng){
+            fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${userLat}&longitude=${userLng}&localityLanguage=pt`)
             .then(response => response.json()).then(data => {
                 console.log("Localização do usuário:", data.city, data.principalSubdivision, data.principalSubdivisionCode);
                 document.querySelector('#city').innerHTML = data.city;
+                buildMap(userLat, userLng);
+                loadIncidents(data.city, ufMapping[data.principalSubdivisionCode]);
+            
             }).catch(error => {
                 console.error("Erro ao obter localização do usuário:", error);
             });
-        }else {
-            // Se geolocalização não for suportada, centraliza em Salvador
-            map.setView([-12.5797, -38.4037], 13);
         }
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap'
-        }).addTo(map);
+        function buildMap(userLat, userLng){            
 
-        fetch('/api/incidentes/last-week')
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            map.setView([userLat, userLng], 13);
+        }
+
+        function loadIncidents(city, uf){
+            fetch(`/api/incidentes/last-in-location?city=${city}&uf=${uf}`)
             .then(response => response.json())
             .then(data => {
-                console.log('Iterando sobre incidentes')
-                data.forEach(incidente => {
-                    L.marker([incidente.latitude, incidente.longitude])
-                        .addTo(map)
-                        .bindPopup(`<b>Descrição:</b> ${incidente.descricao}<br><b>Data/Hora:</b> ${incidente.data_hora}`);
-                });
+                if(data.length != 0){
+                    console.log('Iterando sobre incidentes')
+                    data.forEach(incidente => {
+                        L.marker([incidente.latitude, incidente.longitude])
+                            .addTo(map)
+                            .bindPopup(`<b>Descrição:</b> ${incidente.descricao}<br><b>Data/Hora:</b> ${incidente.data_hora}`);
+                    });
+                }
             })
             .catch(error => console.error('Erro ao carregar incidentes:', error));
+
+
+            const container = document.getElementById('incidentes');
+
+            fetch(`/incidentes/last-in-location?city=${city}&uf=${uf}`)
+            .then(response => {
+                if(!reponse.ok){
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+                
+            }).then(response => {
+                container.innerHTML = response.text();
+            })
+            .catch(error => console.error('Erro ao carregar incidentes:', error));
+        }
+        //.setView([-12.5797, -38.4037], 13); // Salvador
+        //map.setView([-12.5797, -38.4037], 13);
+
+        let userLat;
+        let userLng;
+        if("geolocation" in navigator) {
+            console.log("Obtendo localização");
+            navigator.geolocation.getCurrentPosition(function(position) {
+                console.log("Obtendo latitude.");
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
+                //console.log("User coordinations: ${userLat}, ${userLng}");
+                
+                reverseGeocoding(userLat, userLng);
+            },function(err){
+                console.log(err)
+                if(err.code == 2){
+                    userLat = -12.5571238//-12.9711;
+                    userLng = -38.7343115//-38.5108;
+                    console.log(`User coordinations: ${userLat}, ${userLng}`);
+                    reverseGeocoding(userLat, userLng);
+                }
+            }, {});
+
+            
+        }else {
+            // Se geolocalização não for suportada, centraliza em Salvador
+            console.log("Exibindo mapa com posição default");
+            reverseGeocoding(-12.5797, -38.4037);
+        }
+
+        
+
+        
         //let marker;
 
         // Evento de clique no mapa

@@ -44,4 +44,17 @@ class IncidenteController extends \Core\Controller
         }
     }
 
+    public function lastIncidentsInLocation(Request $request, Response $response)
+    {
+        try {
+            
+            $city = $request->input('city');
+            $uf = $request->input('uf');
+            $incidentes = $this->incidenteService->getIncidentsInCitySince($city, $uf);
+            return $response->json($incidentes);
+        } catch (\Exception $e) {
+            return $response->json(['error' => 'Erro ao buscar incidentes: ' . $e->getMessage()], 500);
+        }
+    }
+
 }

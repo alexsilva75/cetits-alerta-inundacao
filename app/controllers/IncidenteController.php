@@ -55,5 +55,20 @@ class IncidenteController extends \Core\Controller
         echo "Detalhes do incidente com ID: $id";
     }
 
+    public function lastIncidentsInLocation(Request $request, Response $response)
+    {
+        try {
+            
+            $city = $request->input('city');
+            $uf = $request->input('uf');
+            $incidentes = $this->incidenteService->getIncidentsInCitySince($city, $uf);
+           
+            $this->view('layouts/partials/_incidentes.html.twig', [
+                'incidentes' => $incidentes
+            ]);
+        } catch (\Exception $e) {
+            return $response->json(['error' => 'Erro ao buscar incidentes: ' . $e->getMessage()], 500);
+        }
+    }
 
 }

@@ -28,6 +28,8 @@ $router->add('POST', '/incidentes/store', 'IncidenteController@store');
 $router->add('GET', '/usuarios/{id}/edit', 'UsuarioController@edit');
 $router->add('GET', '/incidentes/{id}', 'IncidenteController@fetch');
 $router->add('GET', '/api/incidentes/last-week', 'Api\IncidenteController@lastWeekIncidents');
+$router->add('GET', '/api/incidentes/last-in-location', 'Api\IncidenteController@lastIncidentsInLocation');
+$router->add('GET', '/incidentes/last-in-location', 'IncidenteController@lastIncidentsInLocation');
 
 
 error_log("URL:".$_SERVER['REQUEST_URI']);

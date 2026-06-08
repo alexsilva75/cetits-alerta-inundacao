@@ -1,0 +1,13 @@
+{% if incidentes is empty %}
+                    <p>Nenhum incidente registrado na última semana.</p>
+                {% else %}
+                    <p>Últimos Incidentes: <span id="city"></span></p>
+                    
+                    {% for incidente in incidentes %}
+                        <div class="alert alert-info" role="alert">
+                            <p>{{ incidente.descricao }} - {{ incidente.latitude }}, {{ incidente.longitude }} - {{ incidente.data_hora }}</p>
+                        </div>
+                    {% endfor %}
+                
+
+                {% endif %}

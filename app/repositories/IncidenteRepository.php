@@ -86,12 +86,11 @@ public function findIncidentsSince($data){
 
 public function findIncidentsInCitySince($data, $city, $uf){
     // Lógica para recuperar os incidentes desde uma data específica do banco de dados
-
+    //echo $data;
+    //var_dump($city);
+    //echo $uf;
     $query = <<<SQL
-        SELECT * FROM incidente i JOIN logradouro l 
-        ON i.logradouro_id = l.id JOIN bairro b 
-        ON l.bairro_id = b.id JOIN cidade c 
-        ON b.cidade_id = c.id WHERE i.criado_em >= ? AND c.nome = ? AND c.uf = ?
+        SELECT * FROM incidente WHERE criado_em >= ? AND cidade = ? AND uf = ?
     SQL;
     $stmt = $this->pdo->prepare($query);
     $stmt->execute([$data, $city, $uf]);

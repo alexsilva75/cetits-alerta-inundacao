@@ -38,4 +38,12 @@ class IncidenteService{
        
         return $this->incidenteRepository->createIncidente($incidente);
     }
+
+    public function getIncidentsInCitySince($city, $uf ,$days = 30){
+        $date = new \DateTime();
+        $date->modify("-$days days");
+        $formattedDate = $date->format('Y-m-d H:i:s');
+        //var_dump($formattedDate);
+        return $this->incidenteRepository->findIncidentsInCitySince($formattedDate, $city, $uf);
+    }
 }
